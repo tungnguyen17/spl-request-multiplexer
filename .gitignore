@@ -1,0 +1,11 @@
+# DIR
+.anchor
+.DS_Store
+node_modules
+target
+
+# FIL
+Cargo.lock
+package-lock.json
+yarn-error.log
+yarn.lock
