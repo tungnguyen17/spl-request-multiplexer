@@ -38,3 +38,14 @@ pub struct CreateGroupContext<'info> {
 
   pub system_program: Program<'info, System>,
 }
+
+#[derive(Accounts)]
+pub struct UpdateGroupContext<'info> {
+
+  /// CHECK: Group owner, verify using #access_control
+  #[account(signer)]
+  pub owner: AccountInfo<'info>,
+
+  #[account(mut)]
+  pub group: Account<'info, Group>,
+}
