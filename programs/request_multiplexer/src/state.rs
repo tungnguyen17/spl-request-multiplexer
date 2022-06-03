@@ -12,3 +12,20 @@ impl Group {
     32 + 32 + (4 + 32 * usize::from(member_count))
   }
 }
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct InstructionAccount {
+  pub pubkey: Pubkey,
+  pub is_signer: bool,
+  pub is_writable: bool,
+}
+
+impl From<&InstructionAccount> for AccountMeta {
+  fn from(account: &InstructionAccount)
+  -> AccountMeta {
+    match account.is_writable {
+      false => AccountMeta::new_readonly(account.pubkey, account.is_signer),
+      true => AccountMeta::new(account.pubkey, account.is_signer),
+    }
+  }
+}

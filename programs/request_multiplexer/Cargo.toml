@@ -17,7 +17,7 @@ no-idl = []
 no-log-ix-name = []
 
 [lib]
-name = "vault"
+name = "request_multiplexer"
 crate-type = ["cdylib", "lib"]
 
 [profile.release]

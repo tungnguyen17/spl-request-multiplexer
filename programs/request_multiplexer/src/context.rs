@@ -49,3 +49,14 @@ pub struct UpdateGroupContext<'info> {
   #[account(mut)]
   pub group: Account<'info, Group>,
 }
+
+#[derive(Accounts)]
+pub struct ExecuteInstructionContext<'info> {
+
+  /// CHECK: Group member, verify using #access_control
+  #[account(signer)]
+  pub member: AccountInfo<'info>,
+
+  #[account(mut)]
+  pub group: Account<'info, Group>,
+}
