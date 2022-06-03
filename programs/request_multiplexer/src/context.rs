@@ -42,7 +42,7 @@ pub struct CreateGroupContext<'info> {
 #[derive(Accounts)]
 pub struct UpdateGroupContext<'info> {
 
-  /// CHECK: Group owner, verify using #access_control
+  /// CHECK: Group owner, verified using #access_control
   #[account(signer)]
   pub owner: AccountInfo<'info>,
 
@@ -53,10 +53,32 @@ pub struct UpdateGroupContext<'info> {
 #[derive(Accounts)]
 pub struct ExecuteInstructionContext<'info> {
 
-  /// CHECK: Group member, verify using #access_control
+  /// CHECK: Group member, verified using #access_control
   #[account(signer)]
   pub member: AccountInfo<'info>,
 
   #[account(mut)]
   pub group: Account<'info, Group>,
+}
+
+#[derive(Accounts)]
+pub struct TransferOwnershipContext<'info> {
+
+  /// CHECK: Group owner, verified using #access_control
+    #[account(signer)]
+    pub owner: AccountInfo<'info>,
+
+    #[account(mut)]
+    pub group: Account<'info, Group>,
+}
+
+#[derive(Accounts)]
+pub struct AcceptOwnershipContext<'info> {
+
+  /// CHECK: new vault owner, verified using #access_control
+    #[account(signer)]
+    pub new_owner: AccountInfo<'info>,
+
+    #[account(mut)]
+    pub group: Account<'info, Group>,
 }

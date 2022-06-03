@@ -104,10 +104,44 @@ pub mod request_multiplexer {
 
     Ok(())
   }
+
+  #[access_control(is_owner(&ctx.accounts.owner.key, &ctx.accounts.group))]
+  pub fn transfer_ownership(
+    ctx: Context<TransferOwnershipContext>,
+    new_owner: Pubkey,
+  ) -> Result<()> {
+
+    let group = &mut ctx.accounts.group;
+
+    group.new_owner = new_owner;
+
+    Ok(())
+  }
+
+  #[access_control(is_new_owner(&ctx.accounts.new_owner.key, &ctx.accounts.group))]
+  pub fn accept_ownership(
+    ctx: Context<AcceptOwnershipContext>,
+  ) -> Result<()> {
+
+    let group = &mut ctx.accounts.group;
+
+    group.owner = group.new_owner;
+    group.new_owner = solana_program::system_program::ID; // Set to empty
+
+    Ok(())
+  }
 }
 
 pub fn is_owner(user: &Pubkey, group: &Group) -> Result<()> {
   if *user != group.owner {
+    return Err(ErrorCode::Unauthorized.into());
+  }
+
+  Ok(())
+}
+
+pub fn is_new_owner(user: &Pubkey, group: &Group) -> Result<()> {
+  if *user != group.new_owner {
     return Err(ErrorCode::Unauthorized.into());
   }
 
